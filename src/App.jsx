@@ -1,22 +1,22 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react';
-import { 
-  BarChart3, 
-  Leaf, 
-  Users, 
-  Car, 
-  Tv, 
-  Zap, 
-  CheckCircle2, 
-  UploadCloud, 
-  AlertTriangle, 
-  TrendingDown, 
-  Award, 
-  Lock, 
-  Plus, 
-  Check, 
-  Loader2, 
-  Sparkles, 
+import {
+  BarChart3,
+  Leaf,
+  Users,
+  Car,
+  Tv,
+  Zap,
+  CheckCircle2,
+  UploadCloud,
+  AlertTriangle,
+  TrendingDown,
+  Award,
+  Lock,
+  Plus,
+  Check,
+  Loader2,
+  Sparkles,
   Trash2,
   FileText,
   UserPlus
@@ -200,10 +200,10 @@ const REWARDS_DATA = [
 
 function App() {
   const [viewState, setViewState] = useState('landing'); // landing | dashboard
-  
+
   // Navigation
   const [activeTab, setActiveTab] = useState('tracker'); // tracker | lca | dashboard
-  
+
   // Global State
   const [members, setMembers] = useState(INITIAL_MEMBERS);
   const [activeMemberId, setActiveMemberId] = useState('priya');
@@ -236,7 +236,7 @@ function App() {
 
   // Dashboard Period state
   const [dashboardPeriod, setDashboardPeriod] = useState('daily'); // daily | weekly | monthly
-  
+
   // New Member Form State
   const [newMemberName, setNewMemberName] = useState('');
   const [newMemberAvatar, setNewMemberAvatar] = useState('👩');
@@ -293,7 +293,7 @@ function App() {
   // Save Daily Log Action
   const handleSaveDailyLog = () => {
     const totalImpactVal = Number(liveTotalImpact.toFixed(2));
-    
+
     setMembers((prevMembers) =>
       prevMembers.map((m) => {
         if (m.id === activeMemberId) {
@@ -456,12 +456,12 @@ function App() {
   // Household Dashboard Aggregates
   const getHouseholdEmissionsToday = () => {
     return members.reduce((sum, m) => {
-      const transport = 
+      const transport =
         m.dailyLog.transport.petrolCar * TRANSPORT_FACTORS.petrolCar +
         m.dailyLog.transport.dieselCar * TRANSPORT_FACTORS.dieselCar +
         m.dailyLog.transport.twoWheeler * TRANSPORT_FACTORS.twoWheeler +
         m.dailyLog.transport.publicMetro * TRANSPORT_FACTORS.publicMetro;
-      
+
       const appliances = Array.isArray(m.dailyLog.appliances)
         ? m.dailyLog.appliances.reduce((s, app) => s + ((app.wattage * app.hours) / 1000) * GRID_FACTOR, 0)
         : 0;
@@ -473,7 +473,7 @@ function App() {
   // Get ranked daily leaderboard
   const getDailyLeaderboard = () => {
     return members.map(m => {
-      const todayVal = 
+      const todayVal =
         m.dailyLog.transport.petrolCar * TRANSPORT_FACTORS.petrolCar +
         m.dailyLog.transport.dieselCar * TRANSPORT_FACTORS.dieselCar +
         m.dailyLog.transport.twoWheeler * TRANSPORT_FACTORS.twoWheeler +
@@ -481,7 +481,7 @@ function App() {
         (Array.isArray(m.dailyLog.appliances)
           ? m.dailyLog.appliances.reduce((s, app) => s + ((app.wattage * app.hours) / 1000) * GRID_FACTOR, 0)
           : 0);
-      
+
       return {
         ...m,
         todayEmissions: Number(todayVal.toFixed(2))
@@ -497,7 +497,7 @@ function App() {
       currentTotal += m.history.monthly.current || 0;
       previousTotal += m.history.monthly.previous || 0;
     });
-    
+
     let percentReduction = 0;
     if (previousTotal > 0) {
       percentReduction = ((previousTotal - currentTotal) / previousTotal) * 100;
@@ -559,25 +559,25 @@ function App() {
   const startSimulation = (file) => {
     if (!file) return;
     setVerificationStep(1);
-    
+
     const member = members.find(m => m.id === verificationMemberId);
     const targetMemberName = member ? member.name.toLowerCase() : '';
     const fileName = file.name.toLowerCase();
-    
+
     const isNameMatch = targetMemberName && fileName.includes(targetMemberName);
 
     // Step 1: Scanning metadata (0.6s)
     setTimeout(() => {
       setVerificationStep(2);
-      
+
       // Step 2: Account duplication (1.2s)
       setTimeout(() => {
         setVerificationStep(3);
-        
+
         // Step 3: Text alignment & tampering (1.8s)
         setTimeout(() => {
           setVerificationStep(4);
-          
+
           // Step 4: Historical baselines (2.4s)
           setTimeout(() => {
             setVerificationStep(5);
@@ -593,7 +593,7 @@ function App() {
 
   const confirmVerificationSuccess = () => {
     // Update global state: Clear consecutiveZeroDays of active/verified member (e.g. Rahul or Priya)
-    setMembers(prevMembers => 
+    setMembers(prevMembers =>
       prevMembers.map(m => {
         if (m.id === verificationMemberId) {
           return {
@@ -613,7 +613,7 @@ function App() {
 
     setHouseholdPoints(prev => prev + 1000);
     showToast('✅ Account Verified! tata-cashback voucher unlocked, 1000 Points awarded, and fraud status cleared.');
-    
+
     // Reset modal
     setShowVerificationModal(false);
     setVerificationStep(0);
@@ -674,7 +674,7 @@ function App() {
                 EcoTrace Family Hub
               </span>
             </div>
-            
+
             <button
               onClick={() => setViewState('dashboard')}
               className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-750 text-emerald-400 border border-slate-700/50 hover:border-emerald-500/30 transition-all duration-200"
@@ -691,11 +691,11 @@ function App() {
             <div className="inline-flex items-center space-x-2 px-3 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-wider animate-pulse-dot">
               <span>🍃 Intelligent Household Carbon Auditing</span>
             </div>
-            
+
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight font-outfit text-white leading-tight">
               EcoTrace <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-blue-500 bg-clip-text text-transparent">Family Hub</span>
             </h1>
-            
+
             <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-light">
               Track, verify, and reduce your household carbon footprint as a family, powered by advanced Gemini intelligence.
             </p>
@@ -811,33 +811,30 @@ function App() {
           <nav className="hidden md:flex space-x-1">
             <button
               onClick={() => setActiveTab('tracker')}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 ${
-                activeTab === 'tracker'
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 ${activeTab === 'tracker'
                   ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30 border border-transparent'
-              }`}
+                }`}
             >
               <Zap className="h-4 w-4" />
               <span>📊 Daily Tracker</span>
             </button>
             <button
               onClick={() => setActiveTab('lca')}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 ${
-                activeTab === 'lca'
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 ${activeTab === 'lca'
                   ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30 border border-transparent'
-              }`}
+                }`}
             >
               <Leaf className="h-4 w-4" />
               <span>🌱 LCA Deep-Dive</span>
             </button>
             <button
               onClick={() => setActiveTab('dashboard')}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 ${
-                activeTab === 'dashboard'
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 ${activeTab === 'dashboard'
                   ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30 border border-transparent'
-              }`}
+                }`}
             >
               <Users className="h-4 w-4" />
               <span>👨‍👩‍👧 Family Dashboard</span>
@@ -857,32 +854,29 @@ function App() {
             </div>
           </div>
         </div>
-        
+
         {/* Mobile Nav Links */}
         <div className="md:hidden border-t border-slate-800/50 flex justify-around py-2 bg-slate-900/60 backdrop-blur-md">
           <button
             onClick={() => setActiveTab('tracker')}
-            className={`p-2 flex flex-col items-center text-xs font-semibold ${
-              activeTab === 'tracker' ? 'text-emerald-400' : 'text-slate-400'
-            }`}
+            className={`p-2 flex flex-col items-center text-xs font-semibold ${activeTab === 'tracker' ? 'text-emerald-400' : 'text-slate-400'
+              }`}
           >
             <Zap className="h-5 w-5 mb-0.5" />
             <span>Tracker</span>
           </button>
           <button
             onClick={() => setActiveTab('lca')}
-            className={`p-2 flex flex-col items-center text-xs font-semibold ${
-              activeTab === 'lca' ? 'text-emerald-400' : 'text-slate-400'
-            }`}
+            className={`p-2 flex flex-col items-center text-xs font-semibold ${activeTab === 'lca' ? 'text-emerald-400' : 'text-slate-400'
+              }`}
           >
             <Leaf className="h-5 w-5 mb-0.5" />
             <span>LCA</span>
           </button>
           <button
             onClick={() => setActiveTab('dashboard')}
-            className={`p-2 flex flex-col items-center text-xs font-semibold relative ${
-              activeTab === 'dashboard' ? 'text-emerald-400' : 'text-slate-400'
-            }`}
+            className={`p-2 flex flex-col items-center text-xs font-semibold relative ${activeTab === 'dashboard' ? 'text-emerald-400' : 'text-slate-400'
+              }`}
           >
             <Users className="h-5 w-5 mb-0.5" />
             <span>Dashboard</span>
@@ -898,11 +892,10 @@ function App() {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`p-4 rounded-xl border shadow-xl flex items-center space-x-3 backdrop-blur-md transition-all duration-300 animate-slide-up ${
-              toast.type === 'error'
+            className={`p-4 rounded-xl border shadow-xl flex items-center space-x-3 backdrop-blur-md transition-all duration-300 animate-slide-up ${toast.type === 'error'
                 ? 'bg-rose-950/80 border-rose-500/30 text-rose-200'
                 : 'bg-emerald-950/80 border-emerald-500/30 text-emerald-200'
-            }`}
+              }`}
           >
             {toast.type === 'error' ? (
               <AlertTriangle className="h-5 w-5 text-rose-400 shrink-0" />
@@ -916,7 +909,7 @@ function App() {
 
       {/* MAIN CONTAINER */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-        
+
         {/* GLOBAL MOCK FRAUD WARNING */}
         {isAnyMemberFraudulent && (
           <div className="mb-6 p-4 rounded-2xl bg-rose-950/40 border border-rose-500/30 backdrop-blur-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 animate-slide-up">
@@ -970,11 +963,10 @@ function App() {
                     <button
                       key={member.id}
                       onClick={() => setActiveMemberId(member.id)}
-                      className={`relative flex items-center space-x-3 px-4 py-3 rounded-xl border text-left transition-all duration-300 ${
-                        isActive 
+                      className={`relative flex items-center space-x-3 px-4 py-3 rounded-xl border text-left transition-all duration-300 ${isActive
                           ? `bg-slate-800 border-${member.color}-500/50 shadow-md`
                           : 'bg-slate-900/40 border-slate-800 hover:bg-slate-900/80'
-                      }`}
+                        }`}
                       style={{
                         borderColor: isActive ? member.colorHex : 'transparent'
                       }}
@@ -1004,31 +996,29 @@ function App() {
 
             {/* Input Panel tabs */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-              
+
               {/* Sliders Input Panel */}
               <div className="lg:col-span-8 glass-panel rounded-3xl border border-slate-800/85 overflow-hidden shadow-xl">
-                
+
                 {/* Internal Tabs */}
                 <div className="bg-slate-900/60 px-6 py-4 border-b border-slate-800/60 flex items-center justify-between">
                   <div className="flex space-x-2">
                     <button
                       onClick={() => setTrackerSubTab('transport')}
-                      className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-2 ${
-                        trackerSubTab === 'transport'
+                      className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-2 ${trackerSubTab === 'transport'
                           ? 'bg-emerald-500 text-white shadow-md'
                           : 'text-slate-400 hover:text-slate-200'
-                      }`}
+                        }`}
                     >
                       <Car className="h-3.5 w-3.5" />
                       <span>🚗 Transport</span>
                     </button>
                     <button
                       onClick={() => setTrackerSubTab('appliances')}
-                      className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-2 ${
-                        trackerSubTab === 'appliances'
+                      className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-2 ${trackerSubTab === 'appliances'
                           ? 'bg-emerald-500 text-white shadow-md'
                           : 'text-slate-400 hover:text-slate-200'
-                      }`}
+                        }`}
                     >
                       <Tv className="h-3.5 w-3.5" />
                       <span>🔌 Quick Appliances</span>
@@ -1292,13 +1282,13 @@ function App() {
 
               {/* Side Summary Panel */}
               <div className="lg:col-span-4 space-y-6">
-                
+
                 {/* Live Output */}
                 <div className="glass-panel rounded-3xl p-6 border border-slate-800/80 flex flex-col justify-between h-full shadow-xl relative overflow-hidden">
                   <div className="absolute top-0 right-0 bg-emerald-500/10 px-3 py-1 text-[10px] font-bold text-emerald-400 uppercase tracking-widest rounded-bl-xl border-l border-b border-emerald-500/20">
                     Live Calculator
                   </div>
-                  
+
                   <div className="space-y-4">
                     <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block">Summary stats</span>
                     <div>
@@ -1315,17 +1305,17 @@ function App() {
                         <span className="font-mono">{calculateLiveTransportImpact().toFixed(2)} kg</span>
                       </div>
                       <div className="w-full bg-slate-950 h-2 rounded-full overflow-hidden flex">
-                        <div 
-                          className="bg-emerald-500 h-full" 
-                          style={{ 
-                            width: `${liveTotalImpact > 0 ? (calculateLiveTransportImpact() / liveTotalImpact) * 100 : 0}%` 
-                          }} 
+                        <div
+                          className="bg-emerald-500 h-full"
+                          style={{
+                            width: `${liveTotalImpact > 0 ? (calculateLiveTransportImpact() / liveTotalImpact) * 100 : 0}%`
+                          }}
                         />
-                        <div 
-                          className="bg-blue-400 h-full" 
-                          style={{ 
-                            width: `${liveTotalImpact > 0 ? (calculateLiveApplianceImpact() / liveTotalImpact) * 100 : 0}%` 
-                          }} 
+                        <div
+                          className="bg-blue-400 h-full"
+                          style={{
+                            width: `${liveTotalImpact > 0 ? (calculateLiveApplianceImpact() / liveTotalImpact) * 100 : 0}%`
+                          }}
                         />
                       </div>
                       <div className="flex justify-between text-xs text-slate-400">
@@ -1382,11 +1372,10 @@ function App() {
                         setLcaUseHours(prod.defaultUseHours);
                       }
                     }}
-                    className={`glass-panel p-6 rounded-3xl text-left border relative overflow-hidden transition-all duration-300 ${
-                      isSelected
+                    className={`glass-panel p-6 rounded-3xl text-left border relative overflow-hidden transition-all duration-300 ${isSelected
                         ? 'border-emerald-500 bg-slate-800/70 shadow-lg shadow-emerald-950/20'
                         : 'border-slate-850 hover:border-slate-700/80 hover:bg-slate-800/35'
-                    }`}
+                      }`}
                   >
                     <div className="flex justify-between items-start mb-4">
                       <span className="text-4xl">{prod.icon}</span>
@@ -1396,7 +1385,7 @@ function App() {
                     </div>
                     <h4 className="text-lg font-bold text-slate-100">{prod.name}</h4>
                     <p className="text-xs text-slate-400 mt-2 leading-relaxed">{prod.desc}</p>
-                    
+
                     <div className="mt-4 pt-4 border-t border-slate-800/60 grid grid-cols-2 gap-2 text-xs">
                       <div>
                         <span className="text-slate-500 block">Mfg Debt:</span>
@@ -1422,7 +1411,7 @@ function App() {
                   </h4>
                   <p className="text-xs text-slate-400 mt-1">Adjust usage duration to calculate live environmental debt distribution.</p>
                 </div>
-                
+
                 {/* Dynamic Inputs depending on units */}
                 <div className="flex flex-col sm:flex-row gap-4 shrink-0">
                   {selectedLcaProduct.id === 'hairdryer' ? (
@@ -1469,7 +1458,7 @@ function App() {
 
               {/* Outputs side-by-side card layout */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
+
                 {/* Card A: Factory cost */}
                 <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900/60 to-slate-900/20 border border-slate-800/80 flex flex-col justify-between space-y-4">
                   <div>
@@ -1482,7 +1471,7 @@ function App() {
                     </h5>
                   </div>
                   <div className="text-xs text-slate-500 leading-relaxed font-mono">
-                    Formula: (Total Mfg Debt: {selectedLcaProduct.mfgDebt} kg / Total Lifespan: {selectedLcaProduct.lifespan} {selectedLcaProduct.unit}) 
+                    Formula: (Total Mfg Debt: {selectedLcaProduct.mfgDebt} kg / Total Lifespan: {selectedLcaProduct.lifespan} {selectedLcaProduct.unit})
                     * Usage ({lcaUsage} {selectedLcaProduct.unit})
                   </div>
                 </div>
@@ -1499,8 +1488,8 @@ function App() {
                     </h5>
                   </div>
                   <div className="text-xs text-slate-500 leading-relaxed font-mono">
-                    Formula: ({selectedLcaProduct.wattage} Watts * Total Hours: 
-                    {selectedLcaProduct.id === 'hairdryer' ? ` ${(lcaUsage/60).toFixed(2)} hrs` : ` ${lcaUsage * lcaUseHours} hrs`} 
+                    Formula: ({selectedLcaProduct.wattage} Watts * Total Hours:
+                    {selectedLcaProduct.id === 'hairdryer' ? ` ${(lcaUsage / 60).toFixed(2)} hrs` : ` ${lcaUsage * lcaUseHours} hrs`}
                     / 1000) * Grid average ({GRID_FACTOR} kg/kWh)
                   </div>
                 </div>
@@ -1515,15 +1504,15 @@ function App() {
                   </span>
                 </div>
                 <div className="w-full bg-slate-900 h-4 rounded-full overflow-hidden flex border border-slate-800">
-                  <div 
+                  <div
                     className="bg-emerald-500 h-full transition-all duration-300"
                     style={{ width: `${(lcaA / lcaTotal) * 100}%` }}
-                    title={`Manufacturing share: ${((lcaA/lcaTotal)*100).toFixed(1)}%`}
+                    title={`Manufacturing share: ${((lcaA / lcaTotal) * 100).toFixed(1)}%`}
                   />
-                  <div 
+                  <div
                     className="bg-amber-500 h-full transition-all duration-300"
                     style={{ width: `${(lcaB / lcaTotal) * 100}%` }}
-                    title={`Electricity use-phase share: ${((lcaB/lcaTotal)*100).toFixed(1)}%`}
+                    title={`Electricity use-phase share: ${((lcaB / lcaTotal) * 100).toFixed(1)}%`}
                   />
                 </div>
                 <div className="flex justify-between text-[10px] text-slate-500 font-mono">
@@ -1549,7 +1538,7 @@ function App() {
         {/* ======================================================================= */}
         {activeTab === 'dashboard' && (
           <section className="space-y-8 animate-slide-up">
-            
+
             {/* Title and period toggler */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
@@ -1561,31 +1550,28 @@ function App() {
               <div className="flex space-x-1 bg-slate-900 border border-slate-800 p-1.5 rounded-xl shrink-0">
                 <button
                   onClick={() => setDashboardPeriod('daily')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    dashboardPeriod === 'daily'
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${dashboardPeriod === 'daily'
                       ? 'bg-emerald-500 text-white shadow-md'
                       : 'text-slate-400 hover:text-slate-200'
-                  }`}
+                    }`}
                 >
                   📅 Daily View
                 </button>
                 <button
                   onClick={() => setDashboardPeriod('weekly')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    dashboardPeriod === 'weekly'
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${dashboardPeriod === 'weekly'
                       ? 'bg-emerald-500 text-white shadow-md'
                       : 'text-slate-400 hover:text-slate-200'
-                  }`}
+                    }`}
                 >
                   🗓️ Weekly View
                 </button>
                 <button
                   onClick={() => setDashboardPeriod('monthly')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    dashboardPeriod === 'monthly'
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${dashboardPeriod === 'monthly'
                       ? 'bg-emerald-500 text-white shadow-md'
                       : 'text-slate-400 hover:text-slate-200'
-                  }`}
+                    }`}
                 >
                   📈 Monthly Analysis
                 </button>
@@ -1595,7 +1581,7 @@ function App() {
             {/* Sub-Section display based on Period */}
             {dashboardPeriod === 'daily' && (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                
+
                 {/* Household Aggregate Emissions Metric Card */}
                 <div className="lg:col-span-4 glass-panel rounded-3xl p-6 border border-slate-800/80 flex flex-col justify-between h-56 shadow-xl relative">
                   <div>
@@ -1645,11 +1631,11 @@ function App() {
                               </span>
                               <span className="text-[10px] text-slate-500 block">CO₂ today</span>
                             </div>
-                            <div 
-                              className="w-3 h-3 rounded-full" 
-                              style={{ 
-                                backgroundColor: isFraud ? '#EF4444' : (index === 0 ? '#10B981' : member.colorHex) 
-                              }} 
+                            <div
+                              className="w-3 h-3 rounded-full"
+                              style={{
+                                backgroundColor: isFraud ? '#EF4444' : (index === 0 ? '#10B981' : member.colorHex)
+                              }}
                             />
                           </div>
 
@@ -1671,10 +1657,10 @@ function App() {
 
                 {/* Custom SVG Bar Chart comparing total weekly accumulation */}
                 <div className="w-full flex justify-center py-6 overflow-x-auto">
-                  <svg 
-                    width={chartWidth} 
-                    height={chartHeight} 
-                    viewBox={`0 0 ${chartWidth} ${chartHeight}`} 
+                  <svg
+                    width={chartWidth}
+                    height={chartHeight}
+                    viewBox={`0 0 ${chartWidth} ${chartHeight}`}
                     className="overflow-visible"
                   >
                     {/* Grid Lines */}
@@ -1682,20 +1668,20 @@ function App() {
                       const yPos = topMargin + ((100 - gridVal) / 100) * (chartHeight - topMargin - bottomMargin);
                       return (
                         <g key={gridVal}>
-                          <line 
-                            x1={barPadding} 
-                            y1={yPos} 
-                            x2={chartWidth - barPadding} 
-                            y2={yPos} 
-                            stroke="#1e293b" 
-                            strokeWidth="1" 
-                            strokeDasharray="4 4" 
+                          <line
+                            x1={barPadding}
+                            y1={yPos}
+                            x2={chartWidth - barPadding}
+                            y2={yPos}
+                            stroke="#1e293b"
+                            strokeWidth="1"
+                            strokeDasharray="4 4"
                           />
-                          <text 
-                            x={barPadding - 10} 
-                            y={yPos + 4} 
-                            fill="#64748b" 
-                            fontSize="10" 
+                          <text
+                            x={barPadding - 10}
+                            y={yPos + 4}
+                            fill="#64748b"
+                            fontSize="10"
                             className="font-mono text-right"
                             textAnchor="end"
                           >
@@ -1711,7 +1697,7 @@ function App() {
                       const weeklySum = member.history.daily.reduce((sum, item) => sum + item.value, 0);
                       const maxVal = 100; // grid cap for height scaling
                       const scaledHeight = Math.min(1, weeklySum / maxVal) * (chartHeight - topMargin - bottomMargin);
-                      
+
                       const numBars = members.length;
                       const graphWidth = chartWidth - (barPadding * 2);
                       const barGroupWidth = graphWidth / numBars;
@@ -1722,23 +1708,23 @@ function App() {
                       return (
                         <g key={member.id} className="group">
                           {/* Hover Tooltip Box */}
-                          <rect 
-                            x={xPos - 30} 
-                            y={yPos - 30} 
-                            width="84" 
-                            height="20" 
-                            rx="4" 
-                            fill="#0f172a" 
-                            stroke="#334155" 
-                            className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" 
+                          <rect
+                            x={xPos - 30}
+                            y={yPos - 30}
+                            width="84"
+                            height="20"
+                            rx="4"
+                            fill="#0f172a"
+                            stroke="#334155"
+                            className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
                           />
-                          <text 
-                            x={xPos + barWidth / 2} 
-                            y={yPos - 16} 
-                            fill="#f8fafc" 
-                            fontSize="9" 
-                            fontWeight="bold" 
-                            textAnchor="middle" 
+                          <text
+                            x={xPos + barWidth / 2}
+                            y={yPos - 16}
+                            fill="#f8fafc"
+                            fontSize="9"
+                            fontWeight="bold"
+                            textAnchor="middle"
                             className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none font-mono"
                           >
                             {weeklySum.toFixed(1)} kg CO₂
@@ -1773,7 +1759,7 @@ function App() {
                           >
                             {member.avatar} {member.name}
                           </text>
-                          
+
                           {/* Under label values */}
                           <text
                             x={xPos + barWidth / 2}
@@ -1807,7 +1793,7 @@ function App() {
                       <TrendingDown className="h-5 w-5 text-emerald-400" />
                       <span>Monthly Analysis Overview</span>
                     </h5>
-                    
+
                     <p className="text-sm text-slate-300">
                       Our aggregated household footprint is{' '}
                       <span className="font-extrabold text-emerald-400">
@@ -1870,9 +1856,8 @@ function App() {
                         key={av}
                         type="button"
                         onClick={() => setNewMemberAvatar(av)}
-                        className={`text-xl p-1 rounded-md transition-all ${
-                          newMemberAvatar === av ? 'bg-slate-800 border border-slate-700 scale-110' : 'hover:scale-105'
-                        }`}
+                        className={`text-xl p-1 rounded-md transition-all ${newMemberAvatar === av ? 'bg-slate-800 border border-slate-700 scale-110' : 'hover:scale-105'
+                          }`}
                       >
                         {av}
                       </button>
@@ -1896,9 +1881,8 @@ function App() {
                           key={col}
                           type="button"
                           onClick={() => setNewMemberColor(col)}
-                          className={`w-6 h-6 rounded-full border border-slate-950 transition-all ${bgColors[col]} ${
-                            newMemberColor === col ? 'ring-2 ring-white scale-110' : 'hover:scale-105'
-                          }`}
+                          className={`w-6 h-6 rounded-full border border-slate-950 transition-all ${bgColors[col]} ${newMemberColor === col ? 'ring-2 ring-white scale-110' : 'hover:scale-105'
+                            }`}
                         />
                       );
                     })}
@@ -1913,7 +1897,7 @@ function App() {
                   <span>Add Member</span>
                 </button>
               </form>
-              
+
               {/* Member cards drawer for simple management & deleting */}
               <div className="mt-6 pt-6 border-t border-slate-800/60">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-4">Household Registry ({members.length})</span>
@@ -1947,7 +1931,7 @@ function App() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {REWARDS_DATA.map((reward) => {
                   const isUnlocked = unlockedVouchers[reward.id];
-                  
+
                   return (
                     <div
                       key={reward.id}
@@ -2001,11 +1985,10 @@ function App() {
                           <button
                             onClick={() => handleRedeemReward(reward)}
                             disabled={isAnyMemberFraudulent}
-                            className={`px-3 py-1.5 rounded-lg font-bold text-xs transition-all flex items-center space-x-1 shadow-md ${
-                              isAnyMemberFraudulent
+                            className={`px-3 py-1.5 rounded-lg font-bold text-xs transition-all flex items-center space-x-1 shadow-md ${isAnyMemberFraudulent
                                 ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700/30'
                                 : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-950'
-                            }`}
+                              }`}
                           >
                             <span>Redeem coupon</span>
                           </button>
@@ -2031,11 +2014,11 @@ function App() {
             <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-emerald-500/10 rounded-full border border-emerald-500/20 flex items-center justify-center text-4xl">
               🎉
             </div>
-            
+
             <div className="space-y-2 pt-6">
               <h3 className="font-extrabold text-2xl text-white font-outfit">Milestone Unlocked!</h3>
               <p className="text-slate-400 text-xs">
-                Your family emissions this month are <span className="font-extrabold text-emerald-400">{monthlyStats.reduction}% lower</span> than last month. 
+                Your family emissions this month are <span className="font-extrabold text-emerald-400">{monthlyStats.reduction}% lower</span> than last month.
                 You've successfully unlocked the monthly carbon reduction challenge!
               </p>
             </div>
@@ -2064,7 +2047,7 @@ function App() {
       {showVerificationModal && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
           <div className="glass-panel max-w-xl w-full rounded-3xl border border-slate-800/80 shadow-2xl animate-slide-up overflow-hidden">
-            
+
             {/* Header */}
             <div className="bg-slate-900/80 px-6 py-4 border-b border-slate-800/60 flex justify-between items-center">
               <div className="flex items-center space-x-2">
@@ -2086,7 +2069,7 @@ function App() {
 
             {/* Content body */}
             <div className="p-6 space-y-6">
-              
+
               {/* Selector for which member bill belongs to */}
               {verificationStep === 0 && (
                 <div className="space-y-2">
@@ -2109,11 +2092,10 @@ function App() {
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
-                  className={`border-2 border-dashed rounded-3xl p-8 text-center transition-all ${
-                    isDragging
+                  className={`border-2 border-dashed rounded-3xl p-8 text-center transition-all ${isDragging
                       ? 'border-emerald-500 bg-emerald-500/5'
                       : 'border-slate-800 bg-slate-900/20 hover:border-slate-700/80'
-                  }`}
+                    }`}
                 >
                   <div className="flex flex-col items-center space-y-4">
                     <div className="p-4 bg-emerald-500/10 rounded-full border border-emerald-500/20 text-emerald-400">
@@ -2337,3 +2319,4 @@ function App() {
 }
 
 export default App;
+

@@ -7,7 +7,7 @@ function ChatBotWidget({ members = [], activeMemberId = '', monthlyStats = null 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const messagesEndRef = useRef(null);
 
   // Auto scroll to bottom when messages list changes or loading state changes
@@ -34,12 +34,12 @@ function ChatBotWidget({ members = [], activeMemberId = '', monthlyStats = null 
 
     // Create string detailing current members logs
     const memberDetails = members.map(m => {
-      const transportEmissions = 
+      const transportEmissions =
         m.dailyLog.transport.petrolCar * petrolCarFactor +
         m.dailyLog.transport.dieselCar * dieselCarFactor +
         m.dailyLog.transport.twoWheeler * twoWheelerFactor +
         m.dailyLog.transport.publicMetro * publicMetroFactor;
-      
+
       const applianceEmissions = Array.isArray(m.dailyLog.appliances)
         ? m.dailyLog.appliances.reduce((sum, app) => sum + ((app.wattage * app.hours) / 1000) * gridFactor, 0)
         : 0;
@@ -70,11 +70,11 @@ When answering, if the user asks about their own activities, family standings, h
 
   const getSimulationResponse = (query) => {
     const q = query.toLowerCase();
-    
+
     if (q.includes('beef') || q.includes('diet') || q.includes('food') || q.includes('meat') || q.includes('eating')) {
       return "🥩 Beef production has a massive footprint (~60 kg CO2 per kg) due to methane emissions and land use. Swapping just one beef meal a week for plant-based alternatives cuts your food footprint by up to 20%!";
     }
-    
+
     if (q.includes('water heater') || q.includes('appliances') || q.includes('heater') || q.includes('electricity') || q.includes('utility')) {
       return "🚿 Water heaters are heavy energy consumers. Setting the thermostat to 49°C (120°F) instead of higher defaults can save up to 10% on your monthly utility bill and keep verification parameters optimal!";
     }
@@ -105,12 +105,12 @@ When answering, if the user asks about their own activities, family standings, h
         const gridFactor = 0.75;
 
         const memberStandings = members.map(m => {
-          const transportEmissions = 
+          const transportEmissions =
             (m.dailyLog?.transport?.petrolCar || 0) * petrolCarFactor +
             (m.dailyLog?.transport?.dieselCar || 0) * dieselCarFactor +
             (m.dailyLog?.transport?.twoWheeler || 0) * twoWheelerFactor +
             (m.dailyLog?.transport?.publicMetro || 0) * publicMetroFactor;
-          
+
           const applianceEmissions = Array.isArray(m.dailyLog?.appliances)
             ? m.dailyLog.appliances.reduce((sum, app) => sum + (((app.wattage || 0) * (app.hours || 0)) / 1000) * gridFactor, 0)
             : 0;
@@ -239,7 +239,7 @@ Here are some helpful things you can do:
                     I can give footprint tips, explain Life Cycle Assessments, or suggest eco-swaps based on your family logs.
                   </p>
                 </div>
-                
+
                 {/* Starter chips */}
                 <div className="space-y-2">
                   <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block px-1">
@@ -272,11 +272,10 @@ Here are some helpful things you can do:
                   </div>
                 )}
                 <div
-                  className={`p-3 rounded-2xl text-sm leading-relaxed max-w-[85%] shadow-sm ${
-                    msg.role === 'user'
+                  className={`p-3 rounded-2xl text-sm leading-relaxed max-w-[85%] shadow-sm ${msg.role === 'user'
                       ? 'bg-emerald-600 text-white rounded-tr-none ml-auto'
                       : 'bg-slate-800/80 border border-slate-700/40 text-slate-100 rounded-tl-none whitespace-pre-line'
-                  }`}
+                    }`}
                 >
                   {msg.content}
                 </div>
@@ -296,7 +295,7 @@ Here are some helpful things you can do:
                 </div>
               </div>
             )}
-            
+
             <div ref={messagesEndRef} />
           </div>
 
