@@ -198,6 +198,8 @@ const REWARDS_DATA = [
 ];
 
 function App() {
+  const [viewState, setViewState] = useState('landing'); // landing | dashboard
+  
   // Navigation
   const [activeTab, setActiveTab] = useState('tracker'); // tracker | lca | dashboard
   
@@ -652,6 +654,134 @@ function App() {
   const topMargin = 20;
 
   // Render App
+  if (viewState === 'landing') {
+    return (
+      <div className="min-h-screen bg-[#0b0f19] text-slate-100 font-sans relative overflow-hidden flex flex-col justify-between">
+        {/* Deep eco-dark slate background with soft green and blue radial glow effects */}
+        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-glow-emerald pointer-events-none rounded-full opacity-60" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-glow-blue pointer-events-none rounded-full opacity-40" />
+        <div className="absolute top-[30%] right-[15%] w-[350px] h-[350px] bg-gradient-to-tr from-emerald-500/10 to-blue-500/10 blur-[80px] rounded-full pointer-events-none" />
+
+        {/* Top Navbar */}
+        <header className="w-full z-45 backdrop-blur-md border-b border-slate-900/60 bg-[#0b0f19]/80 sticky top-0">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                <Leaf className="h-6 w-6 text-emerald-400" />
+              </div>
+              <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-emerald-400 via-emerald-500 to-blue-400 bg-clip-text text-transparent">
+                EcoTrace Family Hub
+              </span>
+            </div>
+            
+            <button
+              onClick={() => setViewState('dashboard')}
+              className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-750 text-emerald-400 border border-slate-700/50 hover:border-emerald-500/30 transition-all duration-200"
+            >
+              Enter App 🚀
+            </button>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-grow flex flex-col justify-center items-center py-20 relative z-10 text-center">
+          {/* Main Hero Card/Section */}
+          <div className="space-y-6 max-w-4xl">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-wider animate-pulse-dot">
+              <span>🍃 Intelligent Household Carbon Auditing</span>
+            </div>
+            
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight font-outfit text-white leading-tight">
+              EcoTrace <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-blue-500 bg-clip-text text-transparent">Family Hub</span>
+            </h1>
+            
+            <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-light">
+              Track, verify, and reduce your household carbon footprint as a family, powered by advanced Gemini intelligence.
+            </p>
+
+            <div className="pt-8">
+              <button
+                onClick={() => setViewState('dashboard')}
+                className="relative group px-10 py-5 bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500 hover:from-emerald-400 hover:to-blue-400 text-white font-extrabold rounded-2xl shadow-xl shadow-emerald-950/50 hover:shadow-emerald-500/25 transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 text-lg tracking-wide border border-emerald-400/20"
+              >
+                <span className="relative z-10 flex items-center justify-center space-x-2">
+                  <span>Launch Dashboard</span>
+                  <span className="transition-transform group-hover:translate-x-1 duration-200">🚀</span>
+                </span>
+                <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-400 via-teal-400 to-blue-400 opacity-0 group-hover:opacity-20 blur-md transition-opacity duration-300" />
+              </button>
+            </div>
+          </div>
+
+          {/* Feature Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl mx-auto mt-24">
+            {/* Card 1 */}
+            <div className="glass-panel glass-panel-hover p-8 rounded-3xl text-left flex flex-col justify-between h-full relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-emerald-500 to-teal-500 opacity-80" />
+              <div className="space-y-4">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-2xl shadow-inner group-hover:scale-110 transition-transform duration-300">
+                  💡
+                </div>
+                <h3 className="text-xl font-bold text-slate-100 font-outfit">Dynamic Tracking</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">
+                  Log custom appliances (like a water heater), transport, and grid impacts instantly with real-time math.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-slate-800/40 flex items-center text-xs text-emerald-400 font-semibold">
+                <span>Real-Time Calculator</span>
+                <span className="ml-1.5 transition-transform group-hover:translate-x-1 duration-200">→</span>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="glass-panel glass-panel-hover p-8 rounded-3xl text-left flex flex-col justify-between h-full relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-teal-500 to-blue-500 opacity-80" />
+              <div className="space-y-4">
+                <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/25 flex items-center justify-center text-2xl shadow-inner group-hover:scale-110 transition-transform duration-300">
+                  🤖
+                </div>
+                <h3 className="text-xl font-bold text-slate-100 font-outfit">Gemini AI Advisor</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">
+                  Access instant, localized environmental insights powered directly by Gemini.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-slate-800/40 flex items-center text-xs text-blue-450 font-semibold">
+                <span>Personalized Insights</span>
+                <span className="ml-1.5 transition-transform group-hover:translate-x-1 duration-200">→</span>
+              </div>
+            </div>
+
+            {/* Card 3 */}
+            <div className="glass-panel glass-panel-hover p-8 rounded-3xl text-left flex flex-col justify-between h-full relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-500 to-indigo-500 opacity-80" />
+              <div className="space-y-4">
+                <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/25 flex items-center justify-center text-2xl shadow-inner group-hover:scale-110 transition-transform duration-300">
+                  🛡️
+                </div>
+                <h3 className="text-xl font-bold text-slate-100 font-outfit">Anti-Cheat Audit</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">
+                  Secure proof-of-work bill verification that matches profile names to keep family leaderboards honest.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-slate-800/40 flex items-center text-xs text-indigo-400 font-semibold">
+                <span>Tamper-Proof Audit</span>
+                <span className="ml-1.5 transition-transform group-hover:translate-x-1 duration-200">→</span>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        {/* Footer */}
+        <footer className="w-full border-t border-slate-900/60 py-6 mt-12 bg-slate-950/20 backdrop-blur-sm z-10 text-center">
+          <div className="max-w-7xl mx-auto px-4 text-xs text-slate-500 space-y-2">
+            <p>EcoTrace Family Hub © 2026. Empowering green households everywhere.</p>
+            <p className="text-[10px] text-slate-600">Built using advanced Gemini intelligence models.</p>
+          </div>
+        </footer>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen pb-16 relative">
       {/* Background ambient glows */}
@@ -662,6 +792,13 @@ function App() {
       <header className="sticky top-0 z-40 w-full glass-panel border-b border-slate-800/80 shadow-lg backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-3">
+            <button
+              onClick={() => setViewState('landing')}
+              className="text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 border border-slate-800/60 py-1.5 px-2.5 rounded-lg transition-all duration-200 mr-2 flex items-center space-x-1 shrink-0"
+            >
+              <span className="hidden sm:inline">← Back to Home</span>
+              <span className="sm:hidden">← Home</span>
+            </button>
             <div className="p-2 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
               <Leaf className="h-6 w-6 text-emerald-400" />
             </div>
