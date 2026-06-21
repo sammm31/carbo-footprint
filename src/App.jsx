@@ -1181,20 +1181,18 @@ function App() {
                               )}
                             </div>
                           </div>
+                          // Look around line 1186 in src/App.jsx:
                           <input
-                            type="range"
                             min="0"
                             max="24"
                             step="0.5"
+                            aria-label={`Daily usage hours for ${app.name || 'appliance'}`}
                             value={app.hours}
                             onChange={(e) => {
-                              // Security Fix: Prevent unexpected inputs or script injection by allowing only numbers and decimals
                               const sanitized = e.target.value.replace(/[^0-9.]/g, '');
                               const val = Number(sanitized) || 0;
-
                               setApplianceInputs(applianceInputs.map(item => item.id === app.id ? { ...item, hours: val } : item));
                             }}
-
                             className="w-full h-1.5 bg-slate-900 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                           />
                           <div className="flex justify-between text-[10px] text-slate-500 font-mono">
