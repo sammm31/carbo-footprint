@@ -1,8 +1,10 @@
 /* eslint-disable */
-import React, { useState, useEffect } from 'react';
+/* eslint-disable */
+import { useState, useEffect, useMemo } from 'react';
 import {
   BarChart3,
   Leaf,
+
   Users,
   Car,
   Tv,
@@ -277,19 +279,19 @@ function App() {
   const liveTotalImpact = useMemo(() => {
     const formattedInput = {
       energy: {
-        // Gathering from your appliances array calculations
         electricity: Array.isArray(applianceInputs)
           ? applianceInputs.reduce((sum, app) => sum + ((app.wattage * app.hours) / 1000), 0)
           : 0
       },
       transport: {
         petrolCarKm: transportInputs?.petrolCar || 0,
-        // Mapping your other fields if needed, or keeping it clean
+        dieselCarKm: transportInputs?.dieselCar || 0,
+        twowheelerKm: transportInputs?.twowheeler || 0,
         publicTransitKm: transportInputs?.publicMetro || 0
       }
     };
 
-    // Constant-time execution path
+    // Constant-time execution path via engine
     const results = calculateLcaFootprint(formattedInput);
     return results.total;
   }, [transportInputs, applianceInputs]);
