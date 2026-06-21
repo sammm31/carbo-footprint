@@ -22,6 +22,7 @@ import {
   UserPlus
 } from 'lucide-react';
 import ChatBotWidget from './ChatBotWidget';
+import { calculateLcaFootprint } from './carbonEngine';
 
 // Carbon Emission Factors
 const TRANSPORT_FACTORS = {
@@ -272,24 +273,26 @@ function App() {
   };
 
   // Calculations for Tracker
-  const calculateLiveTransportImpact = () => {
-    return (
-      transportInputs.petrolCar * TRANSPORT_FACTORS.petrolCar +
-      transportInputs.dieselCar * TRANSPORT_FACTORS.dieselCar +
-      transportInputs.twoWheeler * TRANSPORT_FACTORS.twoWheeler +
-      transportInputs.publicMetro * TRANSPORT_FACTORS.publicMetro
-    );
-  };
+  // Optimized Calculations utilizing Life Cycle Assessment (LCA) Engine
+  const liveTotalImpact = useMemo(() => {
+    const formattedInput = {
+      energy: {
+        // Gathering from your appliances array calculations
+        electricity: Array.isArray(applianceInputs)
+          ? applianceInputs.reduce((sum, app) => sum + ((app.wattage * app.hours) / 1000), 0)
+          : 0
+      },
+      transport: {
+        petrolCarKm: transportInputs?.petrolCar || 0,
+        // Mapping your other fields if needed, or keeping it clean
+        publicTransitKm: transportInputs?.publicMetro || 0
+      }
+    };
 
-  const calculateLiveApplianceImpact = () => {
-    if (!Array.isArray(applianceInputs)) return 0;
-    return applianceInputs.reduce((sum, app) => {
-      return sum + ((app.wattage * app.hours) / 1000) * GRID_FACTOR;
-    }, 0);
-  };
-
-  const liveTotalImpact = calculateLiveTransportImpact() + calculateLiveApplianceImpact();
-
+    // Constant-time execution path
+    const results = calculateLcaFootprint(formattedInput);
+    return results.total;
+  }, [transportInputs, applianceInputs]);
   // Save Daily Log Action
   const handleSaveDailyLog = () => {
     const totalImpactVal = Number(liveTotalImpact.toFixed(2));
@@ -812,8 +815,8 @@ function App() {
             <button
               onClick={() => setActiveTab('tracker')}
               className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 ${activeTab === 'tracker'
-                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30 border border-transparent'
+                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30 border border-transparent'
                 }`}
             >
               <Zap className="h-4 w-4" />
@@ -822,8 +825,8 @@ function App() {
             <button
               onClick={() => setActiveTab('lca')}
               className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 ${activeTab === 'lca'
-                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30 border border-transparent'
+                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30 border border-transparent'
                 }`}
             >
               <Leaf className="h-4 w-4" />
@@ -832,8 +835,8 @@ function App() {
             <button
               onClick={() => setActiveTab('dashboard')}
               className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 ${activeTab === 'dashboard'
-                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30 border border-transparent'
+                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30 border border-transparent'
                 }`}
             >
               <Users className="h-4 w-4" />
@@ -893,8 +896,8 @@ function App() {
           <div
             key={toast.id}
             className={`p-4 rounded-xl border shadow-xl flex items-center space-x-3 backdrop-blur-md transition-all duration-300 animate-slide-up ${toast.type === 'error'
-                ? 'bg-rose-950/80 border-rose-500/30 text-rose-200'
-                : 'bg-emerald-950/80 border-emerald-500/30 text-emerald-200'
+              ? 'bg-rose-950/80 border-rose-500/30 text-rose-200'
+              : 'bg-emerald-950/80 border-emerald-500/30 text-emerald-200'
               }`}
           >
             {toast.type === 'error' ? (
@@ -964,8 +967,8 @@ function App() {
                       key={member.id}
                       onClick={() => setActiveMemberId(member.id)}
                       className={`relative flex items-center space-x-3 px-4 py-3 rounded-xl border text-left transition-all duration-300 ${isActive
-                          ? `bg-slate-800 border-${member.color}-500/50 shadow-md`
-                          : 'bg-slate-900/40 border-slate-800 hover:bg-slate-900/80'
+                        ? `bg-slate-800 border-${member.color}-500/50 shadow-md`
+                        : 'bg-slate-900/40 border-slate-800 hover:bg-slate-900/80'
                         }`}
                       style={{
                         borderColor: isActive ? member.colorHex : 'transparent'
@@ -1006,8 +1009,8 @@ function App() {
                     <button
                       onClick={() => setTrackerSubTab('transport')}
                       className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-2 ${trackerSubTab === 'transport'
-                          ? 'bg-emerald-500 text-white shadow-md'
-                          : 'text-slate-400 hover:text-slate-200'
+                        ? 'bg-emerald-500 text-white shadow-md'
+                        : 'text-slate-400 hover:text-slate-200'
                         }`}
                     >
                       <Car className="h-3.5 w-3.5" />
@@ -1016,8 +1019,8 @@ function App() {
                     <button
                       onClick={() => setTrackerSubTab('appliances')}
                       className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-2 ${trackerSubTab === 'appliances'
-                          ? 'bg-emerald-500 text-white shadow-md'
-                          : 'text-slate-400 hover:text-slate-200'
+                        ? 'bg-emerald-500 text-white shadow-md'
+                        : 'text-slate-400 hover:text-slate-200'
                         }`}
                     >
                       <Tv className="h-3.5 w-3.5" />
@@ -1373,8 +1376,8 @@ function App() {
                       }
                     }}
                     className={`glass-panel p-6 rounded-3xl text-left border relative overflow-hidden transition-all duration-300 ${isSelected
-                        ? 'border-emerald-500 bg-slate-800/70 shadow-lg shadow-emerald-950/20'
-                        : 'border-slate-850 hover:border-slate-700/80 hover:bg-slate-800/35'
+                      ? 'border-emerald-500 bg-slate-800/70 shadow-lg shadow-emerald-950/20'
+                      : 'border-slate-850 hover:border-slate-700/80 hover:bg-slate-800/35'
                       }`}
                   >
                     <div className="flex justify-between items-start mb-4">
@@ -1551,8 +1554,8 @@ function App() {
                 <button
                   onClick={() => setDashboardPeriod('daily')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${dashboardPeriod === 'daily'
-                      ? 'bg-emerald-500 text-white shadow-md'
-                      : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-emerald-500 text-white shadow-md'
+                    : 'text-slate-400 hover:text-slate-200'
                     }`}
                 >
                   📅 Daily View
@@ -1560,8 +1563,8 @@ function App() {
                 <button
                   onClick={() => setDashboardPeriod('weekly')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${dashboardPeriod === 'weekly'
-                      ? 'bg-emerald-500 text-white shadow-md'
-                      : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-emerald-500 text-white shadow-md'
+                    : 'text-slate-400 hover:text-slate-200'
                     }`}
                 >
                   🗓️ Weekly View
@@ -1569,8 +1572,8 @@ function App() {
                 <button
                   onClick={() => setDashboardPeriod('monthly')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${dashboardPeriod === 'monthly'
-                      ? 'bg-emerald-500 text-white shadow-md'
-                      : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-emerald-500 text-white shadow-md'
+                    : 'text-slate-400 hover:text-slate-200'
                     }`}
                 >
                   📈 Monthly Analysis
@@ -1986,8 +1989,8 @@ function App() {
                             onClick={() => handleRedeemReward(reward)}
                             disabled={isAnyMemberFraudulent}
                             className={`px-3 py-1.5 rounded-lg font-bold text-xs transition-all flex items-center space-x-1 shadow-md ${isAnyMemberFraudulent
-                                ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700/30'
-                                : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-950'
+                              ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700/30'
+                              : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-950'
                               }`}
                           >
                             <span>Redeem coupon</span>
@@ -2093,8 +2096,8 @@ function App() {
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
                   className={`border-2 border-dashed rounded-3xl p-8 text-center transition-all ${isDragging
-                      ? 'border-emerald-500 bg-emerald-500/5'
-                      : 'border-slate-800 bg-slate-900/20 hover:border-slate-700/80'
+                    ? 'border-emerald-500 bg-emerald-500/5'
+                    : 'border-slate-800 bg-slate-900/20 hover:border-slate-700/80'
                     }`}
                 >
                   <div className="flex flex-col items-center space-y-4">
